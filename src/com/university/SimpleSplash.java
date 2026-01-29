@@ -14,12 +14,19 @@ public class SimpleSplash extends JFrame {
      * مُنشئ واجهة البدء البسيطة.
      */
     public SimpleSplash() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+        }
+
         // إعدادات النافذة
         setTitle("نظام إدارة الجامعة المصغر");
         setSize(500, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setLocationRelativeTo(null); // توسيط النافذة
         setLayout(new BorderLayout());
+        applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         
         // تعيين أيقونة التطبيق
         try {
@@ -45,6 +52,7 @@ public class SimpleSplash extends JFrame {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         mainPanel.setBackground(new Color(41, 128, 185));
+        mainPanel.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         
         // شعار الجامعة
         try {
@@ -108,12 +116,13 @@ public class SimpleSplash extends JFrame {
             }
         });
         
+        getRootPane().setDefaultButton(startButton);
         mainPanel.add(startButton);
         
         mainPanel.add(Box.createVerticalStrut(20));
         
         // معلومات المطورين
-        JLabel developersLabel = new JLabel("إعداد: محمد ساري، محمد عبدالسلام، اسامة القاسمي");
+        JLabel developersLabel = new JLabel("إعداد: محمد زيد، محمد ساري، اسامة القاسمي، علي المؤيد، محمد عبدالسلام");
         developersLabel.setFont(new Font("Arial", Font.PLAIN, 11));
         developersLabel.setForeground(new Color(236, 240, 241));
         developersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -135,11 +144,6 @@ public class SimpleSplash extends JFrame {
      * الدالة الرئيسية لتشغيل واجهة البدء.
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new SimpleSplash();
-            }
-        });
+        Main.launch();
     }
 }

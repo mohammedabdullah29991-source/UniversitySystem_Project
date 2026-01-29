@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * @author محمد ساري، محمد عبدالسلام، اسامة القاسمي
+ * @author محمد ساري، محمد عبدالسلام، اسامة القاسمي ، محمد زيد ، علي عبدالله المؤيد 
  * @version 1.0
  * 
  * واجهة البدء (Splash Screen) لنظام إدارة الجامعة المصغر.
@@ -22,13 +22,20 @@ public class SplashScreen extends JFrame {
      * مُنشئ واجهة البدء.
      */
     public SplashScreen() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+        }
+
         // إعدادات النافذة
         setTitle("نظام إدارة الجامعة المصغر");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setLayout(new BorderLayout());
         setUndecorated(true); // إزالة إطار النافذة
         setLocationRelativeTo(null); // توسيط النافذة
+        applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         
         // تعيين أيقونة التطبيق
         try {
@@ -66,12 +73,14 @@ public class SplashScreen extends JFrame {
             }
         };
         mainPanel.setLayout(new BorderLayout());
+        mainPanel.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         
         // لوحة المحتوى
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setOpaque(false);
         contentPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        contentPanel.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         
         // شعار الجامعة
         try {
@@ -112,12 +121,13 @@ public class SplashScreen extends JFrame {
         // زر البدء
         JButton startButton = createStartButton();
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        getRootPane().setDefaultButton(startButton);
         contentPanel.add(startButton);
         
         contentPanel.add(Box.createVerticalStrut(20));
         
         // معلومات المطورين
-        JLabel developersLabel = new JLabel("إعداد: محمد ساري، محمد عبدالسلام، اسامة القاسمي");
+        JLabel developersLabel = new JLabel("إعداد: محمد زيد، محمد ساري، اسامة القاسمي، علي المؤيد، محمد عبدالسلام");
         developersLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         developersLabel.setForeground(new Color(189, 195, 199));
         developersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -222,11 +232,6 @@ public class SplashScreen extends JFrame {
      * الدالة الرئيسية لتشغيل واجهة البدء.
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new SplashScreen();
-            }
-        });
+        Main.launch();
     }
 }

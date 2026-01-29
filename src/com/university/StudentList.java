@@ -1,7 +1,7 @@
 package com.university;
 
 /**
- * @author محمد ساري، محمد عبدالسلام، اسامة القاسمي
+ * @author محمد ساري، محمد عبدالسلام، اسامة القاسمي ، محمد زيد ، علي عبدالله المؤيد 
  * @version 1.0
  * 
  * يمثل هذا الكلاس هيكل البيانات الأساسي للمشروع: القائمة المرتبطة المفردة (Singly Linked List).
@@ -10,12 +10,14 @@ package com.university;
 public class StudentList {
     // مؤشر إلى العقدة الأولى في القائمة (رأس القائمة)
     private Student head;
+    private int size;
 
     /**
      * مُنشئ لإنشاء قائمة طلاب فارغة.
      */
     public StudentList() {
         this.head = null;
+        this.size = 0;
     }
 
     // -----------------------------------------------------------------
@@ -28,12 +30,22 @@ public class StudentList {
      * @param major التخصص
      */
     public void insert(int id, String name, String major) {
-        Student newStudent = new Student(id, name, major);
-        
+        if (id <= 0) {
+            throw new IllegalArgumentException("رقم الطالب يجب أن يكون رقماً موجباً.");
+        }
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("اسم الطالب لا يمكن أن يكون فارغاً.");
+        }
+        if (major == null || major.trim().isEmpty()) {
+            throw new IllegalArgumentException("تخصص الطالب لا يمكن أن يكون فارغاً.");
+        }
+
         // التحقق من عدم تكرار رقم الطالب (ID)
         if (search(id) != null) {
             throw new IllegalArgumentException("الطالب برقم " + id + " موجود بالفعل.");
         }
+
+        Student newStudent = new Student(id, name.trim(), major.trim());
 
         if (head == null) {
             // إذا كانت القائمة فارغة، تصبح العقدة الجديدة هي الرأس
@@ -47,6 +59,8 @@ public class StudentList {
             // ربط آخر عقدة بالعقدة الجديدة
             current.next = newStudent;
         }
+
+        size++;
     }
 
     // -----------------------------------------------------------------
@@ -64,13 +78,22 @@ public class StudentList {
         StringBuilder sb = new StringBuilder();
         Student current = head;
         int count = 1;
+
+        sb.append("عدد الطلاب: ").append(size).append("\n");
+        sb.append("------------------------------------------------------------\n");
+        sb.append(String.format("%-4s | %-8s | %-20s | %-20s\n", "#", "ID", "الاسم", "التخصص"));
+        sb.append("------------------------------------------------------------\n");
         
         // التجوال في القائمة وطباعة بيانات كل طالب
         while (current != null) {
-            sb.append(count++).append(". ").append(current.toString()).append("\n");
+            sb.append(String.format("%-4d | %-8d | %-20s | %-20s\n", count++, current.id, current.name, current.major));
             current = current.next;
         }
         return sb.toString();
+    }
+
+    public int getCount() {
+        return size;
     }
 
     // -----------------------------------------------------------------
@@ -100,9 +123,12 @@ public class StudentList {
      * @return true إذا تم التعديل بنجاح، false إذا لم يتم العثور على الطالب.
      */
     public boolean updateMajor(int id, String newMajor) {
+        if (newMajor == null || newMajor.trim().isEmpty()) {
+            throw new IllegalArgumentException("الرجاء إدخال التخصص الجديد.");
+        }
         Student studentToUpdate = search(id);
         if (studentToUpdate != null) {
-            studentToUpdate.major = newMajor;
+            studentToUpdate.major = newMajor.trim();
             return true;
         }
         return false;
@@ -124,6 +150,7 @@ public class StudentList {
         // الحالة الأولى: حذف العقدة الرأسية (Head)
         if (head.id == id) {
             head = head.next; // نقل الرأس إلى العقدة التالية
+            size--;
             return true;
         }
 
@@ -144,6 +171,7 @@ public class StudentList {
 
         // ربط العقدة السابقة بالعقدة التالية للعقدة المحذوفة
         previous.next = current.next;
+        size--;
         return true;
     }
 }
